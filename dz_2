@@ -1,0 +1,112 @@
+def is_digit(string: str) -> bool:
+    """Проверяет символ на то, что он float"""
+
+    if string.isdigit():
+        return True
+    else:
+        try:
+            float(string)
+            return True
+        except ValueError:
+            return False
+
+
+def function_command_1(dict_data: dict) -> dict:
+    """Функция, которая возвращает словарь - департамент и его отделы"""
+
+    hierarchy_command = {name_department: set() for name_department in set(dict_data['Департамент'])}
+    for name_department, name_part in zip(dict_data['Департамент'], dict_data['Отдел']):
+        hierarchy_command[name_department].add(name_part)
+    return hierarchy_command
+
+
+def mean(list_data: list) -> float:
+    """Функция для подсчёта среднего"""
+
+    return round(sum(list_data) / len(list_data), 2)
+
+
+def function_command_2(dict_data: dict) -> dict:
+    """Функция, которая возвращает словарь с ключами ['Название', 'Численность', '"Вилка" зарплат', 
+    'Cредняя зарплата'] """
+
+    consolidated_report = {key: [] for key in ['Название', 'Численность', '"Вилка" зарплат', 'Cредняя зарплата']}
+    for name_department in set(dict_data['Департамент']):
+        data = {"ФИО полностью": [], "Оклад": []}
+        list_department = list(filter(lambda x: x[0] == name_department, zip(dict_data['Департамент'],
+                                                                             dict_data['ФИО полностью'],
+                                                                             dict_data['Оклад'])))
+        
+        for department_element in list_department:
+            data["ФИО полностью"].append(department_element[1])
+            data["Оклад"].append(department_element[2])
+
+        consolidated_report['Название'].append(name_department)
+        consolidated_report['Численность'].append(len(data["ФИО полностью"]))
+        consolidated_report['"Вилка" зарплат'].append('-'.join([str(min(data["Оклад"])), str(max(data["Оклад"]))]))
+        consolidated_report['Cредняя зарплата'].append(mean(data["Оклад"]))
+
+    return consolidated_report
+
+
+def main():
+    command = 0
+    result_function_command_2 = {}
+
+    with open('Corp_Summary.csv', 'r', encoding='utf-8') as f:
+        dict_data = {title_dict: [] for title_dict in f.readline().strip('\n').split(';')}
+        for line in f:
+            for title_dict, element_file in zip(dict_data.keys(), line.strip('\n').split(';')):
+                if is_digit(element_file):
+                    element_file = float(element_file)
+                dict_data[title_dict].append(element_file)
+
+    while command != 4:
+        print('Выберете одну из четырёх команд: \n \
+        1 Вывести в понятном виде иерархию команд \n \
+        2 Вывести сводный отчёт по департаментам\n \
+        3 Сохранить сводный отчёт по департаментам в виде csv-файла\n \
+        4 Выход из меню'
+              )
+        command = int(input())
+        print()
+        if command == 1:
+            print("Департамент", "|", "Отделы")
+            for key, value in function_command_1(dict_data).items():
+                print(key + ': ' + ', '.join(value))
+            print()
+
+        if command == 2:
+            if not result_function_command_2:
+                result_function_command_2 = function_command_2(dict_data)
+            print("{:^17} | {:^17} | {:^17} | {:^17}".format(*result_function_command_2.keys()))
+            for tuple_element in zip(result_function_command_2['Название'],
+                                     result_function_command_2['Численность'],
+                                     result_function_command_2['"Вилка" зарплат'],
+                                     result_function_command_2['Cредняя зарплата'],
+                                    ):
+                print("{:^17} | {:^17} | {:^17} | {:^17}".format(*tuple_element))
+            print()
+            
+        if command == 3: 
+            if result_function_command_2:
+                result_function_command_3 = result_function_command_2
+            else:
+                result_function_command_3 = function_command_2(dict_data)
+                result_function_command_2 = result_function_command_3
+                
+            with open("consolidated_report.csv", 'w', encoding='utf-8') as file:
+                file.write(";".join(result_function_command_3.keys()) + '\n')
+                for tuple_element in zip(result_function_command_3['Название'],
+                                         result_function_command_3['Численность'],
+                                         result_function_command_3['"Вилка" зарплат'],
+                                         result_function_command_3['Cредняя зарплата'],
+                                        ):
+                    file.write(";".join(list(map(str, tuple_element))) + '\n')
+                print("Done")
+                print()
+    return 1
+
+
+if __name__ == '__main__':
+    main()
