@@ -20,29 +20,23 @@ def function_command_1(dict_data: dict) -> dict:
     return hierarchy_command
 
 
-def summary_data(name_department: str, list_data: list) -> list:
-    """Функция возвращает сводные данные по департаменту"""
-    
-    summary_data_list = [name_department, len(list_data), '-'.join([str(min(map(lambda x: x[1], list_data))),
-                                                                    str(max(map(lambda x: x[1], list_data)))]),
-                         round(sum(map(lambda x: x[1], list_data)) / len(list_data), 2)]
-
-    return summary_data_list
-
-
 def function_command_2(dict_data: dict) -> dict:
     """Функция, которая возвращает словарь с ключами ['Название', 'Численность', '"Вилка" зарплат', 
     'Cредняя зарплата'] """
-    
+
     column_headers = ['Название', 'Численность', '"Вилка" зарплат', 'Cредняя зарплата']
     consolidated_report = {key: [] for key in column_headers}
     for name_department in set(dict_data['Департамент']):
         list_department = list(filter(lambda x: x[0] == name_department, zip(dict_data['Департамент'],
                                                                              dict_data['Оклад'])))
-        
+
         for name_column, data_table in zip(column_headers,
-                                         summary_data(name_department, list_department),
-                                         ):
+                                           [name_department, len(list_department),
+                                            '-'.join([str(min(map(lambda x: x[1], list_department))),
+                                                      str(max(map(lambda x: x[1], list_department)))]),
+                                            round(sum(map(lambda x: x[1], list_department)) / len(list_department), 2)
+                                            ],
+                                           ):
             consolidated_report[name_column].append(data_table)
 
     return consolidated_report
@@ -83,29 +77,32 @@ def main():
                                      result_function_command_2['Численность'],
                                      result_function_command_2['"Вилка" зарплат'],
                                      result_function_command_2['Cредняя зарплата'],
-                                    ):
+                                     ):
                 print("{:^17} | {:^17} | {:^17} | {:^17}".format(*tuple_element))
             print()
-            
-        if command == 3: 
+
+        if command == 3:
             if result_function_command_2:
                 result_function_command_3 = result_function_command_2
             else:
                 result_function_command_3 = function_command_2(dict_data)
                 result_function_command_2 = result_function_command_3
-                
+
             with open("consolidated_report.csv", 'w', encoding='utf-8') as file:
                 file.write(";".join(result_function_command_3.keys()) + '\n')
                 for tuple_element in zip(result_function_command_3['Название'],
                                          result_function_command_3['Численность'],
                                          result_function_command_3['"Вилка" зарплат'],
                                          result_function_command_3['Cредняя зарплата'],
-                                        ):
+                                         ):
                     file.write(";".join(list(map(str, tuple_element))) + '\n')
                 print("Done")
                 print()
     return 1
 
+
+if __name__ == '__main__':
+    main()
 
 if __name__ == '__main__':
     main()
