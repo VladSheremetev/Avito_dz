@@ -20,31 +20,33 @@ def function_command_1(dict_data: dict) -> dict:
     return hierarchy_command
 
 
-def mean(list_data: list) -> float:
-    """Функция для подсчёта среднего"""
+def summary_data(name_department: str, list_data: list) -> list:
+    """Функция возвращает сводные данные по департаменту"""
+    
+    summary_data_list = []
+    summary_data_list.append(name_department)
+    summary_data_list.append(len(list_data))
+    summary_data_list.append('-'.join([str(min(map(lambda x: x[1], list_data))), 
+                                       str(max(map(lambda x: x[1], list_data)))]))
+    summary_data_list.append(round(sum(map(lambda x: x[1], list_data)) / len(list_data), 2))
 
-    return round(sum(list_data) / len(list_data), 2)
+    return summary_data_list
 
 
 def function_command_2(dict_data: dict) -> dict:
     """Функция, которая возвращает словарь с ключами ['Название', 'Численность', '"Вилка" зарплат', 
     'Cредняя зарплата'] """
-
-    consolidated_report = {key: [] for key in ['Название', 'Численность', '"Вилка" зарплат', 'Cредняя зарплата']}
+    
+    column_headers = ['Название', 'Численность', '"Вилка" зарплат', 'Cредняя зарплата']
+    consolidated_report = {key: [] for key in column_headers}
     for name_department in set(dict_data['Департамент']):
-        data = {"ФИО полностью": [], "Оклад": []}
         list_department = list(filter(lambda x: x[0] == name_department, zip(dict_data['Департамент'],
-                                                                             dict_data['ФИО полностью'],
                                                                              dict_data['Оклад'])))
         
-        for department_element in list_department:
-            data["ФИО полностью"].append(department_element[1])
-            data["Оклад"].append(department_element[2])
-
-        consolidated_report['Название'].append(name_department)
-        consolidated_report['Численность'].append(len(data["ФИО полностью"]))
-        consolidated_report['"Вилка" зарплат'].append('-'.join([str(min(data["Оклад"])), str(max(data["Оклад"]))]))
-        consolidated_report['Cредняя зарплата'].append(mean(data["Оклад"]))
+        for name_column, data_table in zip(column_headers,
+                                         summary_data(name_department, list_department),
+                                         ):
+            consolidated_report[name_column].append(data_table)
 
     return consolidated_report
 
