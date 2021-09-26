@@ -23,12 +23,9 @@ def function_command_1(dict_data: dict) -> dict:
 def summary_data(name_department: str, list_data: list) -> list:
     """Функция возвращает сводные данные по департаменту"""
     
-    summary_data_list = []
-    summary_data_list.append(name_department)
-    summary_data_list.append(len(list_data))
-    summary_data_list.append('-'.join([str(min(map(lambda x: x[1], list_data))), 
-                                       str(max(map(lambda x: x[1], list_data)))]))
-    summary_data_list.append(round(sum(map(lambda x: x[1], list_data)) / len(list_data), 2))
+    summary_data_list = [name_department, len(list_data), '-'.join([str(min(map(lambda x: x[1], list_data))),
+                                                                    str(max(map(lambda x: x[1], list_data)))]),
+                         round(sum(map(lambda x: x[1], list_data)) / len(list_data), 2)]
 
     return summary_data_list
 
