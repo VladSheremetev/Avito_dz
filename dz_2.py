@@ -1,7 +1,7 @@
 import csv
 
-department_name = 0
-salary = 1
+DEPARTMENT_NAME = 0
+SALARY = 1
 
 menu_options = 'Выберете одну из четырёх команд: \n \
         1 Вывести в понятном виде иерархию команд \n \
@@ -26,34 +26,33 @@ def get_department(employee_data_dict: dict) -> set:
 
 def get_department_data(name_department: str, employee_data_dict: dict) -> list:
     """Функция, которая возвращает данные для департаменту по окладу"""
-
-    return list(filter(lambda x: x[department_name] == name_department,
-                       zip(employee_data_dict['Департамент'],
+    
+    return list(filter(lambda x: x[DEPARTMENT_NAME] == name_department, 
+                       zip(employee_data_dict['Департамент'], 
                            employee_data_dict['Оклад'])))
 
 
-def department_summary(name_department: str, department_data: list) -> list[str]:
+def department_summary(name_department: str, department_data: list) -> zip:
     """Функция, которая возвращает сводные данные для департамента"""
-
-    min_salary_department = min(map(lambda x: float(x[salary]), department_data))
-    max_salary_department = max(map(lambda x: float(x[salary]), department_data))
-    sum_salary_department = sum(map(lambda x: float(x[salary]), department_data))
+    
+    min_salary_department = min(map(lambda x: float(x[SALARY]), department_data))
+    max_salary_department = max(map(lambda x: float(x[SALARY]), department_data))
+    sum_salary_department = sum(map(lambda x: float(x[SALARY]), department_data))
     mean_salary_department = str(round(sum_salary_department / len(department_data), 2))
-
-    return [name_department, str(len(department_data)),
+    
+    return [name_department, str(len(department_data)), 
             f"{min_salary_department}-{max_salary_department}",
             mean_salary_department]
-
+                                         
 
 def get_summary_data(employee_data_dict: dict) -> dict:
     """Функция, которая возвращает сводные данные для всех департаментов"""
-
+    
     column_headers_summary_data = ['Название', 'Численность', '"Вилка" зарплат', 'Cредняя зарплата']
     dict_summary_data = {headers_summary_data: [] for headers_summary_data in column_headers_summary_data}
     for name_department in get_department(employee_data_dict):
         department_data = get_department_data(name_department, employee_data_dict)
-        for headers_column, data_table in zip(column_headers_summary_data,
-                                              department_summary(name_department, department_data)):
+        for headers_column, data_table in zip(column_headers_summary_data, department_summary(name_department, department_data)): 
             dict_summary_data[headers_column].append(data_table)
 
     return dict_summary_data
@@ -61,7 +60,7 @@ def get_summary_data(employee_data_dict: dict) -> dict:
 
 def read_file_csv(name_file: str) -> dict:
     """Функция, которая считывает данные из файла"""
-
+    
     with open(name_file, encoding='UTF-8') as f:
         reader = csv.DictReader(f, delimiter=';')
         header = next(reader)
@@ -74,7 +73,7 @@ def read_file_csv(name_file: str) -> dict:
 
 def print_department_and_divisions(employee_data_dict: dict):
     """Функция, которая печатает в консоль иерархию команд"""
-
+    
     print("Департамент", "|", "Отделы")
     dict_department_and_divisions = get_department_and_divisions(employee_data_dict)
     for department, divisions in dict_department_and_divisions.items():
@@ -85,14 +84,14 @@ def print_department_and_divisions(employee_data_dict: dict):
 
 def print_summary_data(dict_summary_data: dict):
     """Функция, которая печатает в консоль сводные данные по департаментам"""
-
+    
     header_columns = dict_summary_data.keys()
     print("{:^17} | {:^17} | {:^17} | {:^17}".format(*header_columns))
     for line_summary_data in zip(dict_summary_data['Название'],
                                  dict_summary_data['Численность'],
                                  dict_summary_data['"Вилка" зарплат'],
                                  dict_summary_data['Cредняя зарплата'],
-                                 ):
+                                ):
         print("{:^17} | {:^17} | {:^17} | {:^17}".format(*line_summary_data))
     print()
     return None
@@ -100,7 +99,7 @@ def print_summary_data(dict_summary_data: dict):
 
 def print_summary_data_to_csv_file(dict_summary_data: dict):
     """Функция, которая печатает в файл сводные данные по департаментам"""
-
+    
     with open("consolidated_report.csv", 'w', encoding='utf-8') as file:
         header_columns = dict_summary_data.keys()
         file.write(";".join(header_columns) + '\n')
@@ -108,7 +107,7 @@ def print_summary_data_to_csv_file(dict_summary_data: dict):
                                      dict_summary_data['Численность'],
                                      dict_summary_data['"Вилка" зарплат'],
                                      dict_summary_data['Cредняя зарплата'],
-                                     ):
+                                    ):
             file.write(";".join(line_summary_data) + '\n')
         print("Summary data printed to consolidated_report.csv")
     print()
@@ -116,9 +115,10 @@ def print_summary_data_to_csv_file(dict_summary_data: dict):
 
 
 def get_command(employee_data_dict: dict):
+    
     command = 0
     dict_summary_data = {}
-
+    
     while command != 4:
         print(menu_options)
         command = int(input())
@@ -128,15 +128,15 @@ def get_command(employee_data_dict: dict):
         if command == 2:
             if not dict_summary_data:
                 dict_summary_data = get_summary_data(employee_data_dict)
-            print_summary_data(dict_summary_data)
-        if command == 3:
+            print_summary_data(dict_summary_data)   
+        if command == 3: 
             if not dict_summary_data:
                 dict_summary_data = get_summary_data(employee_data_dict)
             print_summary_data_to_csv_file(dict_summary_data)
     return None
 
-
-def main():
+    
+def main():   
     employee_data_dict = read_file_csv("Corp_Summary.csv")
     get_command(employee_data_dict)
     return 1
