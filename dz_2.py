@@ -3,7 +3,7 @@ import csv
 DEPARTMENT_NAME = 0
 SALARY = 1
 
-menu_options = 'Выберете одну из четырёх команд: \n \
+MENU_OPTIONS = 'Выберете одну из четырёх команд: \n \
         1 Вывести в понятном виде иерархию команд \n \
         2 Вывести сводный отчёт по департаментам\n \
         3 Сохранить сводный отчёт по департаментам в виде csv-файла\n \
@@ -120,7 +120,7 @@ def get_command(employee_data_dict: dict):
     dict_summary_data = {}
     
     while command != 4:
-        print(menu_options)
+        print(MENU_OPTIONS)
         command = int(input())
         print()
         if command == 1:
