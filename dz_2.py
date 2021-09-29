@@ -43,7 +43,15 @@ def department_summary(name_department: str, department_data: list) -> list:
     return [name_department, str(len(department_data)), 
             f"{min_salary_department}-{max_salary_department}",
             mean_salary_department]
-                                         
+
+
+def add_department_summary_data(dict_summary_data: dict, column_headers_summary_data: list,
+                                name_department: str, department_data: list):
+    """Функция, которая добавляет сводные данные департамента в общую таблицу с сводными данными"""
+    for headers_column, data_table in zip(column_headers_summary_data, department_summary(name_department, department_data)): 
+            dict_summary_data[headers_column].append(data_table)
+    return None
+
 
 def get_summary_data(employee_data_dict: dict) -> dict:
     """Функция, которая возвращает сводные данные для всех департаментов"""
@@ -52,8 +60,7 @@ def get_summary_data(employee_data_dict: dict) -> dict:
     dict_summary_data = {headers_summary_data: [] for headers_summary_data in column_headers_summary_data}
     for name_department in get_department(employee_data_dict):
         department_data = get_department_data(name_department, employee_data_dict)
-        for headers_column, data_table in zip(column_headers_summary_data, department_summary(name_department, department_data)): 
-            dict_summary_data[headers_column].append(data_table)
+        add_department_summary_data(dict_summary_data, column_headers_summary_data, name_department, department_data)
 
     return dict_summary_data
 
