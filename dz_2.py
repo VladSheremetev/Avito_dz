@@ -32,7 +32,7 @@ def get_department_data(name_department: str, employee_data_dict: dict) -> list:
                            employee_data_dict['Оклад'])))
 
 
-def department_summary(name_department: str, department_data: list) -> zip:
+def department_summary(name_department: str, department_data: list) -> list(str):
     """Функция, которая возвращает сводные данные для департамента"""
     
     min_salary_department = min(map(lambda x: float(x[SALARY]), department_data))
