@@ -1,8 +1,8 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 import random
 
 
-class AnimeMon:
+class AnimeMon(ABC):
     def __init__(self, name: str):
         self.name = name
 
