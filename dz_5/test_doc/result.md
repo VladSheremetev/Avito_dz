@@ -1,17 +1,5 @@
 ```
 Trying:
-    decode('... --- ...')
-Expecting:
-    'SOS'
-ok
-Trying:
-    decode('/')# doctest: +ELLIPSIS
-Expecting:
-    Traceback (most recent call last):
-    ...
-    KeyError: '/'
-ok
-Trying:
     encode('SOS')
 Expecting:
     '... --- ...'
@@ -23,12 +11,12 @@ Expecting:
     ...
     KeyError: 'А'
 ok
-1 items had no tests:
+2 items had no tests:
     test_doc_morse
-2 items passed all tests:
-   2 tests in test_doc_morse.decode
+    test_doc_morse.decode
+1 items passed all tests:
    2 tests in test_doc_morse.encode
-4 tests in 3 items.
-4 passed and 0 failed.
+2 tests in 3 items.
+2 passed and 0 failed.
 Test passed.
 ```
