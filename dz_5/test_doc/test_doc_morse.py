@@ -48,16 +48,8 @@ def encode(message: str) -> str:
 
 
 def decode(morse_message: str) -> str:
-    r"""
+    """
     Декодирует строку из азбуки Морзе в английский
-
-    >>> decode('... --- ...')
-    'SOS'
-
-    >>> decode('/')# doctest: +ELLIPSIS
-    Traceback (most recent call last):
-    ...
-    KeyError: '/'
 
     """
     decoded_letters = [
