@@ -1,3 +1,5 @@
+from typing import List
+
 """Morse Code Translator"""
 
 LETTER_TO_MORSE = {
@@ -35,12 +37,29 @@ def encode(message: str) -> str:
     return ' '.join(encoded_signs)
 
 
+def my_split(string: str) -> List[str]:
+    list_split = []
+    str_split = ''
+    for symbol in string:
+        if symbol == ' ' and str_split != '':
+            list_split.append(str_split)
+            str_split = ''
+            continue
+        elif symbol == ' ' and str_split == '':
+            list_split.append(' ')
+            continue
+        str_split += symbol
+    if str_split != '':
+        list_split.append(str_split)
+    return list_split
+
+
 def decode(morse_message: str) -> str:
     """
     Декодирует строку из азбуки Морзе в английский
     """
     decoded_letters = [
-        MORSE_TO_LETTER[letter] for letter in morse_message.split()
+        MORSE_TO_LETTER[letter] for letter in my_split(morse_message)
     ]
 
     return ''.join(decoded_letters)
