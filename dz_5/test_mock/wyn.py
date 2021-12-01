@@ -37,11 +37,3 @@ class What_is_year_now():
             raise ValueError('Invalid format')
 
         return int(year_str)
-
-
-if __name__ == '__main__':
-    year = What_is_year_now().what_is_year_now()
-    exp_year = 2021
-    print(What_is_year_now.__dict__)
-    print(year)
-    assert year == exp_year
