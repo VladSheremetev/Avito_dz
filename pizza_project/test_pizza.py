@@ -1,5 +1,6 @@
 import pizza_project as pz
 import pytest
+from mock import patch
 
 
 def test_margherita():
@@ -21,3 +22,21 @@ def test_eq():
 
     assert not (a == b)
     assert (a == c)
+
+
+def test_pickup():
+    patch('pz.log', lambda x: x)
+    assert not pz.pickup('peperoni')
+
+
+def test_delivery_pizza():
+    patch('pz.log', lambda x: x)
+    assert not pz.delivery_pizza('peperoni')
+
+
+def test_order():
+    patch('cli.command', lambda x: x)
+    patch('click.option', lambda x: x)
+    patch('click.argument', lambda x: x)
+    patch('pz.log', lambda x: x)
+    assert pz.order('peperoni', True) == ':bike: Доставили за 2с!'
