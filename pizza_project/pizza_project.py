@@ -2,7 +2,6 @@ from abc import ABC
 import click
 import numpy as np
 from functools import wraps
-import emoji
 
 
 def log(text: str):
@@ -35,16 +34,16 @@ def order(pizza: str, delivery: bool):
         pickup(pizza)
 
 
-@log(':bike: Доставили за {}с!')
+@log('🛵 Доставили за {}с!')
 def delivery_pizza(pizza: str):
     """Функция ответственная за доставку пиццы"""
-    pass
+    return None
 
 
-@log(':house: Забрали за {}с!')
+@log('🏠 Забрали за {}с!')
 def pickup(pizza: str):
     """Функция ответственная за самовывоз пиццы"""
-    pass
+    return None
 
 
 @cli.command()
